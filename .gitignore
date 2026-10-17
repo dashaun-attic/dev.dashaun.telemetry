@@ -16,3 +16,6 @@ target/
 
 ### Mac ###
 .DS_Store
+
+### maven-git-versioning-extension
+.git-versioned-pom.xml
