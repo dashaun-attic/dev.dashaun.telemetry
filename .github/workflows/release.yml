@@ -16,6 +16,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          # Fetch all history and tags so maven-git-versioning-extension can
+          # resolve the version from the pushed tag.
           fetch-depth: 0
 
       - name: Set up JDK 8
@@ -25,14 +27,9 @@ jobs:
           java-version: '8'
           cache: maven
 
-      - name: Set Maven version to match tag
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          echo "Tag:        ${GITHUB_REF_NAME}"
-          echo "Maven ver:  ${VERSION}"
-          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
-          ./mvnw -B -ntp versions:set -DnewVersion="${VERSION}" -DgenerateBackupPoms=false
-
+      # The Maven version is derived from the tag by the
+      # maven-git-versioning-extension (.mvn/extensions.xml), so tag v0.0.1
+      # builds version 0.0.1 automatically. No manual version bump needed.
       - name: Build
         run: ./mvnw -B -ntp clean package
 
@@ -40,7 +37,7 @@ jobs:
         run: |
           mkdir -p dist
           cp telemetry-spring-boot-starter/target/*.jar dist/
-          cp "telemetry-sample-app/target/telemetry-sample-app-${VERSION}.jar" dist/
+          cp telemetry-sample-app/target/*.jar dist/
           ls -1 dist/
 
       - name: Create GitHub Release

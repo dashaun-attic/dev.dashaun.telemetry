@@ -48,11 +48,11 @@ dashaun.telemetry.address=https://example.com/telemetry
 A GitHub Actions workflow (`.github/workflows/release.yml`) creates a release
 when a semver tag starting with `v` is pushed, e.g. `v0.0.1`.
 
-The workflow:
-
-1. Strips the `v`, sets the Maven version to match the tag (e.g. tag `v0.0.1`
-   builds `0.0.1`), and runs `mvn clean package`.
-2. Creates a GitHub release at that tag and attaches the built jars.
+The Maven version is derived from the tag by the
+[`maven-git-versioning-extension`](https://github.com/qoomon/maven-git-versioning-extension)
+(configured in `.mvn/extensions.xml`), so tag `v0.0.1` builds version `0.0.1`
+automatically. The workflow then runs `mvn clean package` and creates a GitHub
+release at the tag, attaching the built jars.
 
 To cut a release:
 
@@ -60,4 +60,5 @@ To cut a release:
 git tag v0.0.1
 git push origin v0.0.1
 ```
+
 
