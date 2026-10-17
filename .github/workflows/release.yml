@@ -29,8 +29,17 @@ jobs:
           cache: maven
 
       # The Maven version is derived from the tag by the
-      # maven-git-versioning-extension (.mvn/extensions.xml), so tag v0.0.1
-      # builds version 0.0.1 automatically. No manual version bump needed.
+      # maven-git-versioning-extension (.mvn/extensions.xml). The explicit
+      # versions:set below is a deterministic safeguard so the release
+      # artifacts always match the tag (v2.6.0 -> 2.6.0), even if the
+      # extension cannot resolve the tag in the runner.
+      - name: Set Maven version to match tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Tag: ${GITHUB_REF_NAME}"
+          echo "Version from tag: ${VERSION}"
+          ./mvnw -B -ntp versions:set -DnewVersion="${VERSION}" -DgenerateBackupPoms=false
+
       - name: Build
         run: ./mvnw -B -ntp clean package
 
