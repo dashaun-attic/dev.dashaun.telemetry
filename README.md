@@ -1,6 +1,6 @@
 # dev.dashaun.telemetry
 
-A Spring Boot starter (Spring Boot 2.6, Java 8) that POSTs a telemetry ping on
+A Spring Boot starter (Spring Boot 2.7, Java 11) that POSTs a telemetry ping on
 application startup using `RestTemplate`.
 
 On startup the starter POSTs `Hello, world!` to a configurable address. The call
@@ -21,7 +21,7 @@ regardless of whether the endpoint is reachable.
 
 ## Usage
 
-Add the dependency to your Spring Boot 2.6 application:
+Add the dependency to your Spring Boot 2.7 application:
 
 ```xml
 <dependency>
@@ -48,11 +48,10 @@ dashaun.telemetry.address=https://example.com/telemetry
 A GitHub Actions workflow (`.github/workflows/release.yml`) creates a release
 when a semver tag starting with `v` is pushed, e.g. `v0.0.1`.
 
-The Maven version is derived from the tag by the
-[`maven-git-versioning-extension`](https://github.com/qoomon/maven-git-versioning-extension)
-(configured in `.mvn/extensions.xml`), so tag `v0.0.1` builds version `0.0.1`
-automatically. The workflow then runs `mvn clean package` and creates a GitHub
-release at the tag, attaching the built jars.
+The Maven version is set from the tag by the workflow with `versions:set`, so
+tag `v0.0.1` builds and releases version `0.0.1`. The workflow then runs
+`mvn clean package` and creates a GitHub release at the tag, attaching the built
+jars.
 
 To cut a release:
 

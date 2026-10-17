@@ -21,11 +21,11 @@ jobs:
           # resolve the version from the pushed tag.
           fetch-depth: 0
 
-      - name: Set up Liberica JDK 17
+      - name: Set up Liberica JDK 11
         uses: actions/setup-java@v4
         with:
           distribution: liberica
-          java-version: '17.0.20'
+          java-version: '11.0.32'
           cache: maven
 
       # The Maven version is derived from the tag by the
