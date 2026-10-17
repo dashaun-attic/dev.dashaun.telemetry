@@ -42,3 +42,22 @@ dashaun.telemetry.address=https://example.com/telemetry
 ```bash
 ./mvnw verify
 ```
+
+## Release
+
+A GitHub Actions workflow (`.github/workflows/release.yml`) creates a release
+when a semver tag starting with `v` is pushed, e.g. `v0.0.1`.
+
+The workflow:
+
+1. Strips the `v`, sets the Maven version to match the tag (e.g. tag `v0.0.1`
+   builds `0.0.1`), and runs `mvn clean package`.
+2. Creates a GitHub release at that tag and attaches the built jars.
+
+To cut a release:
+
+```bash
+git tag v0.0.1
+git push origin v0.0.1
+```
+
