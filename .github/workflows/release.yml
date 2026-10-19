@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: liberica
-          java-version: '11.0.32'
+          java-version: '17'
           cache: maven
 
       # The Maven version is derived from the tag by the

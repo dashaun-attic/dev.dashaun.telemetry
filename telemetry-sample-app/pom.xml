@@ -7,7 +7,7 @@
     <parent>
         <groupId>dev.dashaun</groupId>
         <artifactId>telemetry</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>telemetry-sample-app</artifactId>
@@ -20,6 +20,12 @@
             <groupId>dev.dashaun</groupId>
             <artifactId>telemetry-spring-boot-starter</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
