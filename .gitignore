@@ -22,3 +22,4 @@ target/
 
 ### maven-git-versioning-extension
 .git-versioned-pom.xml
+**/pom.xml.versionsBackup
