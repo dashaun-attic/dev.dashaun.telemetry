@@ -3,13 +3,11 @@ package dev.dashaun.telemetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 /**
- * Sends a telemetry payload to a configurable address using {@link RestTemplate}.
+ * Sends a telemetry payload to a configurable address using {@link RestClient}.
  *
  * <p>The call is best effort: any failure is logged at {@code debug} level and
  * swallowed, so the client application starts and runs regardless of whether the
@@ -21,12 +19,12 @@ public class TelemetryService {
 
 	private static final String PAYLOAD = "Hello, world!";
 
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 
 	private final TelemetryProperties properties;
 
-	public TelemetryService(RestTemplate restTemplate, TelemetryProperties properties) {
-		this.restTemplate = restTemplate;
+	public TelemetryService(RestClient restClient, TelemetryProperties properties) {
+		this.restClient = restClient;
 		this.properties = properties;
 	}
 
@@ -36,10 +34,12 @@ public class TelemetryService {
 	public void send() {
 		String address = properties.getAddress();
 		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.TEXT_PLAIN);
-			HttpEntity<String> request = new HttpEntity<>(PAYLOAD, headers);
-			restTemplate.postForEntity(address, request, String.class);
+			restClient.post()
+					.uri(address)
+					.contentType(MediaType.TEXT_PLAIN)
+					.body(PAYLOAD)
+					.retrieve()
+					.toBodilessEntity();
 			log.debug("Telemetry sent to {}", address);
 		}
 		catch (Exception ex) {

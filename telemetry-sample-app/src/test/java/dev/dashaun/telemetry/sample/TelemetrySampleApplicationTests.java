@@ -9,7 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.atLeastOnce;
@@ -39,7 +39,7 @@ class TelemetrySampleApplicationTests {
 		verify(telemetryService, atLeastOnce()).send();
 
 		// The starter's auto-configured beans are present in the sample app context
-		assertThat(context.getBean(RestTemplate.class)).isNotNull();
+		assertThat(context.getBean(RestClient.class)).isNotNull();
 		assertThat(context.getBean(TelemetryService.class)).isSameAs(telemetryService);
 		assertThat(context.getBeansOfType(ApplicationRunner.class)).isNotEmpty();
 	}

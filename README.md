@@ -1,7 +1,7 @@
 # dev.dashaun.telemetry
 
-A Spring Boot starter (Spring Boot 3.0, Java 17) that POSTs a telemetry ping on
-application startup using `RestTemplate`.
+A Spring Boot starter (Spring Boot 3.2, Java 17) that POSTs a telemetry ping on
+application startup using `RestClient`.
 
 On startup the starter POSTs `Hello, world!` to a configurable address. The call
 is best effort: it fails/succeeds silently, and the application starts and runs
@@ -21,7 +21,7 @@ regardless of whether the endpoint is reachable.
 
 ## Usage
 
-Add the dependency to your Spring Boot 3.0 application:
+Add the dependency to your Spring Boot 3.2 application:
 
 ```xml
 <dependency>

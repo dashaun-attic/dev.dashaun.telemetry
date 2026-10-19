@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +25,7 @@ class TelemetryAutoConfigurationTests {
 	@Test
 	void registersTelemetryBeansByDefault() {
 		contextRunner.run(context -> {
-			assertThat(context).hasSingleBean(RestTemplate.class);
+			assertThat(context).hasSingleBean(RestClient.class);
 			assertThat(context).hasSingleBean(TelemetryService.class);
 			assertThat(context).hasSingleBean(ApplicationRunner.class);
 		});
@@ -47,7 +46,7 @@ class TelemetryAutoConfigurationTests {
 		contextRunner
 				.withPropertyValues("dashaun.telemetry.enabled=false")
 				.run(context -> {
-					assertThat(context).doesNotHaveBean(RestTemplate.class);
+					assertThat(context).doesNotHaveBean(RestClient.class);
 					assertThat(context).doesNotHaveBean(TelemetryService.class);
 					assertThat(context).doesNotHaveBean(ApplicationRunner.class);
 				});
@@ -57,8 +56,8 @@ class TelemetryAutoConfigurationTests {
 	static class TestConfiguration {
 
 		@Bean
-		RestTemplateBuilder restTemplateBuilder() {
-			return new RestTemplateBuilder();
+		RestClient.Builder restClientBuilder() {
+			return RestClient.builder();
 		}
 	}
 

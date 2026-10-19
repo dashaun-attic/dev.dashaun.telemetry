@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.springframework.test.web.client.ExpectedCount.once;
@@ -18,8 +18,9 @@ class TelemetryServiceTests {
 
 	@Test
 	void sendPostsToConfiguredAddress() {
-		RestTemplate restTemplate = new RestTemplate();
-		MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+		RestClient.Builder builder = RestClient.builder();
+		MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+		RestClient restClient = builder.build();
 
 		TelemetryProperties properties = new TelemetryProperties();
 		properties.setAddress("https://example.com/telemetry");
@@ -30,15 +31,16 @@ class TelemetryServiceTests {
 				.andExpect(content().string("Hello, world!"))
 				.andRespond(withSuccess());
 
-		new TelemetryService(restTemplate, properties).send();
+		new TelemetryService(restClient, properties).send();
 
 		server.verify();
 	}
 
 	@Test
 	void sendDefaultsToTelemetryEndpoint() {
-		RestTemplate restTemplate = new RestTemplate();
-		MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+		RestClient.Builder builder = RestClient.builder();
+		MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+		RestClient restClient = builder.build();
 
 		TelemetryProperties properties = new TelemetryProperties();
 
@@ -46,22 +48,23 @@ class TelemetryServiceTests {
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withSuccess());
 
-		new TelemetryService(restTemplate, properties).send();
+		new TelemetryService(restClient, properties).send();
 
 		server.verify();
 	}
 
 	@Test
 	void sendDoesNotThrowWhenEndpointUnavailable() {
-		RestTemplate restTemplate = new RestTemplate();
-		MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+		RestClient.Builder builder = RestClient.builder();
+		MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+		RestClient restClient = builder.build();
 
 		TelemetryProperties properties = new TelemetryProperties();
 
 		server.expect(once(), requestTo("https://telemetry.dashaun.io"))
 				.andRespond(withSuccess());
 
-		TelemetryService service = new TelemetryService(restTemplate, properties);
+		TelemetryService service = new TelemetryService(restClient, properties);
 
 		assertThatCode(service::send).doesNotThrowAnyException();
 
